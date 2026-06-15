@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LogiTrack — Monitoramento de Entregas</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+
+</head>
+<body>
+<header>
+  <div class="wrap topbar">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#04222e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/>
+        </svg>
+      </div>
+      <div>
+        <h1>LogiTrack</h1>
+        <p>Centro de Monitoramento de Entregas · Nacional</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="import-status" id="import-status"></span>
+      <input type="file" id="file-input" accept=".csv,.xls,.xlsx" hidden>
+      <button class="btn-upload" id="btn-upload" title="Importar entregas a partir de CSV, XLS ou XLSX">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/>
+        </svg>
+        Importar CSV / XLS
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Filtros -->
+  <div class="eyebrow">Filtros</div>
+  <div class="filters">
+    <div class="field">
+      <label for="f-regiao">Região</label>
+      <select id="f-regiao"><option value="">Todas as regiões</option></select>
+    </div>
+    <div class="field">
+      <label for="f-transp">Transportadora</label>
+      <select id="f-transp"><option value="">Todas as transportadoras</option></select>
+    </div>
+    <div class="field">
+      <label for="f-status">Status</label>
+      <select id="f-status">
+        <option value="">Todos os status</option>
+        <option value="ok">No prazo</option>
+        <option value="late">Atrasada</option>
+        <option value="crit">Crítica</option>
+      </select>
+    </div>
+    <button class="btn-reset" id="reset">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9 9 9 0 00-6.4 2.6L3 8"/><path d="M3 3v5h5"/></svg>
+      Limpar
+    </button>
+    <div class="result-count" id="rcount"></div>
+  </div>
+
+<main class="wrap">
+  <!-- Totalizadores agrupados por contexto -->
+  <div class="eyebrow">Visão geral da operação</div>
+  <div class="totals" id="totals"></div>
+
+  <!-- Charts -->
+  <div class="eyebrow">Análise gráfica</div>
+  <div class="charts">
+    <div class="panel">
+      <div class="panel-head"><h3>Entregas atrasadas por transportadora</h3><span>distribuição dos atrasos</span></div>
+      <div class="chart-box"><canvas id="chartTransp"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Média de atraso por região</h3><span>dias (atraso médio)</span></div>
+      <div class="chart-box"><canvas id="chartRegiao"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Ranking -->
+  <div class="eyebrow">Ranking de desempenho · pior para melhor</div>
+  <div class="panel"><div id="ranking"></div></div>
+
+  <!-- Table -->
+  <div class="eyebrow">Detalhamento das entregas</div>
+  <div class="table-wrap">
+    <table id="tbl">
+      <thead><tr>
+        <th data-k="id_entrega">ID <span class="arrow">↕</span></th>
+        <th data-k="transportadora">Transportadora <span class="arrow">↕</span></th>
+        <th data-k="regiao">Região <span class="arrow">↕</span></th>
+        <th data-k="prazo_dias">Prazo <span class="arrow">↕</span></th>
+        <th data-k="dias_reais">Dias reais <span class="arrow">↕</span></th>
+        <th data-k="atraso" class="sorted">Atraso <span class="arrow">↓</span></th>
+        <th data-k="status">Status <span class="arrow">↕</span></th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="pagination-container" id="pagination" style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 16px;">
+  </div>
+
+  <!-- Insights por último . lista orgânica, sem cartões separados-->
+  <div class="eyebrow">Insights automáticos · apoio à decisão</div>
+  <div class="panel insights-panel" id="insights"></div>
+
+  <footer>LogiTrack · Painel de Business Intelligence logístico · indicadores recalculados em tempo real conforme os filtros aplicados.</footer>
+</main>
+<script src="data.js"></script>
+<script src="importer.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

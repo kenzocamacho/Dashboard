@@ -1,0 +1,12 @@
+Região,Dias,ID,Prazo,Transportadora
+Sudeste,7,301,3,RotaMax
+Sul,5,302,5,ViaCargo
+Nordeste,9,303,4,FlashLog
+Norte,4,304,6,RotaMax
+Centro-Oeste,6,305,2,ViaCargo
+Sul,12,306,5,FlashLog
+Sul,9,307,6,RotaMax
+Sudeste,4,308,3,ViaCargo
+Norte,5,309,5,FlashLog
+Nordeste,8,310,4,ViaCargo
+Sul,10,311,2,FlashLog
